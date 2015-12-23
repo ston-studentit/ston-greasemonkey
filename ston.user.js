@@ -13,11 +13,15 @@ var Page = new Page();
 var ThreadOverview = new ThreadOverview();
 var Thread = new Thread();
 var Post = new Post();
+var SidePanel = new SidePanel();
 
 $(document).ready(function() {
+    embedYoutubeLinks();
+    cleanUpThreadOverviewTitle();
     fillPostSubjectIfEmpty();
     keepPrivateMessages();
     removeCurrentNews();
+    removeFirstPagingInThreadOverview();
     removeMarkAsReadedLinks();
     removePagingText();
     reducePagingWidth();
@@ -30,6 +34,9 @@ function ThreadOverview() {
     this.markAsReadedLinks = $('a[title~="Punkte)"]');
     this.forumTable = $('.ston-forumtab');
     this.redDotElements = this.forumTable.find("span[title='Neu']");
+    this.newCreateThreadButton = function() {
+        return $('<a style="margin: 0 0 4px 0; font-weight: bold" class="ston-f-button ston-farbe ston-linkn" href="' + SidePanel.writeButton.attr('href') + '">Neues Thema</a>');
+    }
 }
 
 function Page() {
@@ -51,6 +58,7 @@ function Page() {
 function Thread() {
     this.textblockElements = $('.ston-f-textblock');
     this.markAsReadedLinks = $('a[title~="Punkte)"]');
+    this.firstLevelYoutubeLinks = $('.ston-f-textblock > a[href*="youtube.com/watch?"]');
 }
 
 function Post() {
@@ -86,7 +94,44 @@ function Post() {
           blockquote.children().first().prepend(deleteButtonElement);
        }
     };
-    
+}
+
+function SidePanel() {
+    this.buttons = $('#ston-sp-buttons');
+    this.writeButton = this.buttons.find('a[href*="Fragen-Brett/posting.php?"]');
+}
+
+// Ersetzt die obere Seitennavigation durch "Neues Thema"-Button
+function removeFirstPagingInThreadOverview() { // TODO: function name
+    if(Page.isThreadOverview()) {
+        var firstPagingElement = Page.pagingElements.first();
+        firstPagingElement.before(ThreadOverview.newCreateThreadButton());
+        firstPagingElement.remove();
+    } 
+}
+
+// Entfernt die Angabe der Seitenanzahl aus dem Title
+// Entfernt den den Text "Unterform" aus der Thread Übersicht
+// TODO: Für Threads und Unterordner übernehmen
+function cleanUpThreadOverviewTitle() {
+    if(Page.isThreadOverview()) {
+        var title = $('h1');
+        var topTitle = $('.ston-spitz');
+        topTitle.remove();
+        title.addClass('ston-farbe');
+        title.text(title.text().substring(0, title.text().indexOf('[') - 1));
+    }
+}
+
+// Ersetzt Youtube-Links durch Youtube-Player
+function embedYoutubeLinks() {
+    Thread.firstLevelYoutubeLinks.each(function() {
+        var youtubeLink = $(this);
+        var youtubeEmbeddedSource = 'https://youtube.com/embed/' + youtubeLink.attr('href').substring(youtubeLink.attr('href').indexOf('watch?v=') + 8); 
+        var youtubeEmbeddedIFrame = $('<br><iframe width=560 height=360 src="' + youtubeEmbeddedSource + '" frameborder=0 allowfullscreen></iframe><br>');
+        youtubeLink.before(youtubeEmbeddedIFrame);
+        youtubeLink.remove();
+    });
 }
 
 // Füllt den Betreff eines Posts, falls leer
