@@ -35,7 +35,7 @@ function ThreadOverview() {
     this.forumTable = $('.ston-forumtab');
     this.redDotElements = this.forumTable.find("span[title='Neu']");
     this.newCreateThreadButton = function() {
-        return $('<div style="margin-bottom: 0.85rem; font-weight: bold"><div class="ston-f-b-new"><a class="ston-f-button ston-farbe ston-linkn" href="' + SidePanel.writeButton.attr('href') + '">Neues Thema</a></div></div>');
+        return $('<a href="' + SidePanel.writeButton.attr('href') + '"><button style="margin-bottom: 0.625rem" class="ston-f-button ston-f-buttonf"><div class="ston-f-b-new"></div>Neues Thema</div></button></a>');
     }
 }
 
