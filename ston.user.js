@@ -35,7 +35,7 @@ function ThreadOverview() {
     this.forumTable = $('.ston-forumtab');
     this.redDotElements = this.forumTable.find("span[title='Neu']");
     this.newCreateThreadButton = function() {
-        return $('<a style="margin: 0 0 4px 0; font-weight: bold" class="ston-f-button ston-farbe ston-linkn" href="' + SidePanel.writeButton.attr('href') + '">Neues Thema</a>');
+        return $('<div style="margin-bottom: 0.85rem; font-weight: bold"><div class="ston-f-b-new"><a class="ston-f-button ston-farbe ston-linkn" href="' + SidePanel.writeButton.attr('href') + '">Neues Thema</a></div></div>');
     }
 }
 
@@ -117,9 +117,8 @@ function cleanUpThreadOverviewTitle() {
     if(Page.isThreadOverview()) {
         var title = $('h1');
         var topTitle = $('.ston-spitz');
-        topTitle.remove();
-        title.addClass('ston-farbe');
-        title.text(title.text().substring(0, title.text().indexOf('[') - 1));
+        topTitle.text(title.text().substring(0, title.text().indexOf('[') - 1));
+        title.remove();
     }
 }
 
