@@ -16,15 +16,18 @@ var Post = new Post();
 var SidePanel = new SidePanel();
 
 $(document).ready(function() {
+    // Mobile
     minimizeForumTableOnMobile();
     removeHelloOnMobile();
+    
+    // Desktop
     embedYoutubeLinks();
     cleanUpThreadOverviewTitle();
     cleanUpThreadTitle();
     fillPostSubjectIfEmpty();
     keepPrivateMessages();
     removeCurrentNews();
-    removeMarkAsReadedLinks();
+    removeMarkAsReadedButton();
     removePagingText();
     reducePagingWidth();
     insertLetterToMarkThreadAsRead();
@@ -66,7 +69,7 @@ function Page() {
 function Thread() {
     this.title = $('h1');
     this.textblockElements = $('.ston-f-textblock');
-    this.markAsReadedLinks = $('a[title~="Punkte)"]');
+    this.markAsReadedButton = $('a.ston-f-button[title~="markiert)"]');
     this.firstLevelYoutubeLinks = $('.ston-f-textblock > a[href*="youtube.com/watch?"]');
 }
 
@@ -135,18 +138,25 @@ function minimizeForumTableOnMobile() {
 
 // Entfernt die Angabe der Seitenanzahl aus dem Titel
 function cleanUpThreadTitle() {
-    if(Page.isThread()) {
-        let title = Thread.title;
+    var title = Thread.title;
+    
+    if(Page.isThread() && title.text().indexOf('[') > -1) {
         title.text(title.text().substring(0, title.text().indexOf('[') - 1));
     }    
 }
 
 // Entfernt die Angabe der Seitenanzahl aus dem Title
+// Position des Titels angepasst
 // TODO: Für Unterordner übernehmen
 function cleanUpThreadOverviewTitle() {
     if(Page.isThreadOverview()) {
-        var title = $('h1 a');
-        title.text(title.text().substring(0, title.text().indexOf('[') - 1));
+        var title = $('h1');
+        title.addClass('ston-spitz');
+        var titleLink = title.find('a');
+        titleLink.removeClass('ston-nolink');
+        titleLink.css('text-decoration', 'none');
+        titleLink.css('background', 'transparent');
+        titleLink.text(title.text().substring(0, title.text().indexOf('[') - 1));
     }
 }
 
@@ -204,12 +214,12 @@ function reducePagingWidth() {
     });
 }
 
-// Entfernt Thema als Gelesen Markieren in Threads
-function removeMarkAsReadedLinks() {
+// Entfernt "Thema als Gelesen Markieren"-Button" in Threads, sofern ausgeführt
+function removeMarkAsReadedButton() {
     if(Page.isThread()) {
-        Thread.markAsReadedLinks.each(function() {
+        Thread.markAsReadedButton.click(function() {
             $(this).remove();
-        })
+        });
     }
 }
 
