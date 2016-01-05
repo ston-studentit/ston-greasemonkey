@@ -20,11 +20,10 @@ $(document).ready(function() {
     removeHelloOnMobile();
     embedYoutubeLinks();
     cleanUpThreadOverviewTitle();
-    cleanUpThreadTitle();
+    // FAIL cleanUpThreadTitle();
     fillPostSubjectIfEmpty();
     keepPrivateMessages();
     removeCurrentNews();
-    removeFirstPagingInThreadOverview();
     removeMarkAsReadedLinks();
     removePagingText();
     reducePagingWidth();
@@ -134,15 +133,6 @@ function minimizeForumTableOnMobile() {
     }
 }
 
-// Ersetzt die obere Seitennavigation durch "Neues Thema"-Button
-function removeFirstPagingInThreadOverview() { // TODO: function name
-    if(Page.isThreadOverview()) {
-        var firstPagingElement = Page.pagingElements.first();
-        firstPagingElement.before(ThreadOverview.newCreateThreadButton());
-        firstPagingElement.remove();
-    } 
-}
-
 // Entfernt die Angabe der Seitenanzahl aus dem Titel
 function cleanUpThreadTitle() {
     if(Page.isThread()) {
@@ -218,11 +208,7 @@ function reducePagingWidth() {
 }
 
 // Entfernt Thema als Gelesen Markieren in Threads
-function removeMarkAsReadedLinks() {
-    ThreadOverview.markAsReadedLinks.each(function() {
-       $(this).remove(); 
-    });
-    
+function removeMarkAsReadedLinks() {    
     Thread.markAsReadedLinks.each(function() {
         $(this).remove();
     })
