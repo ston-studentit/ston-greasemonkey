@@ -20,7 +20,7 @@ $(document).ready(function() {
     removeHelloOnMobile();
     embedYoutubeLinks();
     cleanUpThreadOverviewTitle();
-    // FAIL cleanUpThreadTitle();
+    cleanUpThreadTitle();
     fillPostSubjectIfEmpty();
     keepPrivateMessages();
     removeCurrentNews();
@@ -142,14 +142,11 @@ function cleanUpThreadTitle() {
 }
 
 // Entfernt die Angabe der Seitenanzahl aus dem Title
-// Entfernt den den Text "Unterform" aus der Thread Übersicht
 // TODO: Für Unterordner übernehmen
 function cleanUpThreadOverviewTitle() {
     if(Page.isThreadOverview()) {
-        var title = $('h1');
-        var topTitle = $('.ston-spitz');
-        topTitle.text(title.text().substring(0, title.text().indexOf('[') - 1));
-        title.remove();
+        var title = $('h1 a');
+        title.text(title.text().substring(0, title.text().indexOf('[') - 1));
     }
 }
 
@@ -208,10 +205,12 @@ function reducePagingWidth() {
 }
 
 // Entfernt Thema als Gelesen Markieren in Threads
-function removeMarkAsReadedLinks() {    
-    Thread.markAsReadedLinks.each(function() {
-        $(this).remove();
-    })
+function removeMarkAsReadedLinks() {
+    if(Page.isThread()) {
+        Thread.markAsReadedLinks.each(function() {
+            $(this).remove();
+        })
+    }
 }
 
 // Ersetzt "rote Punkte" (== ungelesen) durch Briefe, welche beim Klick, den Thread als gelesen markieren
