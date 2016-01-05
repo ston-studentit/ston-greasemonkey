@@ -25,7 +25,6 @@ $(document).ready(function() {
     cleanUpThreadOverviewTitle();
     cleanUpThreadTitle();
     fillPostSubjectIfEmpty();
-    keepPrivateMessages();
     removeCurrentNews();
     removeMarkAsReadedButton();
     removePagingText();
@@ -176,13 +175,6 @@ function fillPostSubjectIfEmpty() {
     if(Post.subjectInput.length > 0) {
        let threadSubject = Post.subjectInput.attr('value');
        Post.subjectInput.parent().find('span').text(threadSubject);
-    }
-}
-
-// Gesendete Nachrichten speichern
-function keepPrivateMessages() {
-    if(Page.isPrivateMessage()) {
-       Post.keepPrivateMessageCheckbox.click();
     }
 }
 
