@@ -16,8 +16,11 @@ var Post = new Post();
 var SidePanel = new SidePanel();
 
 $(document).ready(function() {
+    minimizeForumTableOnMobile();
+    removeHelloOnMobile();
     embedYoutubeLinks();
     cleanUpThreadOverviewTitle();
+    cleanUpThreadTitle();
     fillPostSubjectIfEmpty();
     keepPrivateMessages();
     removeCurrentNews();
@@ -33,14 +36,16 @@ $(document).ready(function() {
 function ThreadOverview() {
     this.markAsReadedLinks = $('a[title~="Punkte)"]');
     this.forumTable = $('.ston-forumtab');
+    this.threadInfoElements = this.forumTable.find('tr');
     this.redDotElements = this.forumTable.find("span[title='Neu']");
     this.newCreateThreadButton = function() {
-        return $('<a href="' + SidePanel.writeButton.attr('href') + '"><button style="margin-bottom: 0.625rem" class="ston-f-button ston-f-buttonf"><div class="ston-f-b-new"></div>Neues Thema</div></button></a>');
+        return $('<a class="ston-hidemobile" href="' + SidePanel.writeButton.attr('href') + '"><button style="margin-bottom: 0.625rem" class="ston-f-button ston-f-buttonf"><div class="ston-f-b-new"></div>Neues Thema</div></button></a>');
     }
 }
 
 function Page() {
     this.pagingElements = $('.ston-f-paging');
+    this.helloMessageElement = $('#ston-f-hello');
     
     // Ob es sich um die Thread-Übersicht-Seite handelt
     this.isThreadOverview = function() {
@@ -53,9 +58,14 @@ function Page() {
         //return $('form[action="http://www.studis-online.de/Fragen-Brett/pm.php"]').length === 1;
         return window.location.pathname === '/Fragen-Brett/pm.php';
     };
+    
+    this.isThread = function() {
+        return window.location.pathname === '/Fragen-Brett/read.php';
+    };
 }
 
 function Thread() {
+    this.title = $('h1');
     this.textblockElements = $('.ston-f-textblock');
     this.markAsReadedLinks = $('a[title~="Punkte)"]');
     this.firstLevelYoutubeLinks = $('.ston-f-textblock > a[href*="youtube.com/watch?"]');
@@ -101,6 +111,29 @@ function SidePanel() {
     this.writeButton = this.buttons.find('a[href*="Fragen-Brett/posting.php?"]');
 }
 
+
+// Entfernt den Text "Hallo, XYZ" auf Mobilgeräten
+function removeHelloOnMobile() {
+    Page.helloMessageElement.addClass('ston-hidemobile');
+}
+
+// Entfernt Zusatzinformationen (Seitenanzahl, Threadersteller und letzer Post) in der mobilen Darstellung
+function minimizeForumTableOnMobile() {
+    if(Page.isThreadOverview()) {   
+        ThreadOverview.threadInfoElements.each(function() {
+            var threadInfoElement = $(this);
+            var threadTitle = threadInfoElement.children().first();
+            var threadCount = threadTitle.next();
+            var threadAuthor = threadCount.next();
+            var lastPostBy = threadAuthor.next();
+            
+            threadCount.addClass('ston-hidemobile');
+            threadAuthor.addClass('ston-hidemobile');
+            lastPostBy.addClass('ston-hidemobile');
+        });
+    }
+}
+
 // Ersetzt die obere Seitennavigation durch "Neues Thema"-Button
 function removeFirstPagingInThreadOverview() { // TODO: function name
     if(Page.isThreadOverview()) {
@@ -110,9 +143,17 @@ function removeFirstPagingInThreadOverview() { // TODO: function name
     } 
 }
 
+// Entfernt die Angabe der Seitenanzahl aus dem Titel
+function cleanUpThreadTitle() {
+    if(Page.isThread()) {
+        let title = Thread.title;
+        title.text(title.text().substring(0, title.text().indexOf('[') - 1));
+    }    
+}
+
 // Entfernt die Angabe der Seitenanzahl aus dem Title
 // Entfernt den den Text "Unterform" aus der Thread Übersicht
-// TODO: Für Threads und Unterordner übernehmen
+// TODO: Für Unterordner übernehmen
 function cleanUpThreadOverviewTitle() {
     if(Page.isThreadOverview()) {
         var title = $('h1');
