@@ -26,12 +26,20 @@ $(document).ready(function() {
     cleanUpThreadTitle();
     fillPostSubjectIfEmpty();
     removeCurrentNews();
-    removeMarkAsReadedButton();
-    removePagingText();
-    reducePagingWidth();
     insertLetterToMarkThreadAsRead();
     insertDeleteQuoteButtons();
     scaleImageWidthInThreads();
+    removeMarkAsReadedButton();
+    
+    if(Page.isThread()) {
+       Thread.jumpToReply.remove();    
+    }
+    
+    // start -- don't change the order
+    removePagingText();
+    reducePagingWidth();
+    restorePagingOnTopInThreads();
+    // -- end
 });
 
 function ThreadOverview() {
@@ -70,6 +78,8 @@ function Thread() {
     this.textblockElements = $('.ston-f-textblock');
     this.markAsReadedButton = $('a.ston-f-button[title~="markiert)"]');
     this.firstLevelYoutubeLinks = $('.ston-f-textblock > a[href*="youtube.com/watch?"]');
+    this.jumpToPaging = $('a[href="#ston-f-paging"]');
+    this.jumpToReply = $('a[href="#REPLY"]');
 }
 
 function Post() {
@@ -209,9 +219,21 @@ function reducePagingWidth() {
 // Entfernt "Thema als Gelesen Markieren"-Button" in Threads, sofern ausgeführt
 function removeMarkAsReadedButton() {
     if(Page.isThread()) {
+        Thread.title.append(Thread.markAsReadedButton);
+        Thread.markAsReadedButton.css('margin-left', '5px');
+        Thread.markAsReadedButton.css('font-size', '0.75rem');
+        Thread.markAsReadedButton.css('line-height', '0.75rem');
         Thread.markAsReadedButton.click(function() {
             $(this).remove();
         });
+    }
+}
+
+// Fügt die Seitennavigation über den Beiträgen ein
+function restorePagingOnTopInThreads() {
+    if(Page.isThread()) {
+        Thread.title.after(Page.pagingElements.clone());
+        Thread.jumpToPaging.remove();
     }
 }
 
