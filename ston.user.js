@@ -35,11 +35,9 @@ $(document).ready(function() {
        Thread.jumpToReply.remove();    
     }
     
-    // start -- don't change the order
     removePagingText();
     reducePagingWidth();
-    restorePagingOnTopInThreads();
-    // -- end
+    movePagingToleft();
 });
 
 function ThreadOverview() {
@@ -122,6 +120,13 @@ function SidePanel() {
     this.writeButton = this.buttons.find('a[href*="Fragen-Brett/posting.php?"]');
 }
 
+// Seitennavigation in Threads wird linksbündig
+function movePagingToleft() {
+    if(Page.isThread()) {
+        Thread.title.next().remove();
+        Thread.title.next().removeClass("ston-right");
+    }
+}
 
 // Entfernt den Text "Hallo, XYZ" auf Mobilgeräten
 function removeHelloOnMobile() {
