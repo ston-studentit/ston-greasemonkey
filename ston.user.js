@@ -51,8 +51,6 @@ function ThreadOverview() {
 }
 
 function Page() {
-    this.forumFrame = $('.ston-art');
-    this.headline = Page.forumFrame.find('.ston-hl');
     this.pagingElements = $('.ston-f-paging');
     this.helloMessageElement = $('#ston-f-hello');
     
@@ -120,11 +118,6 @@ function Post() {
 function SidePanel() {
     this.buttons = $('#ston-sp-buttons');
     this.writeButton = this.buttons.find('a[href*="Fragen-Brett/posting.php?"]');
-}
-
-function removeHints() {
-    Page.headline.css('color', 'red');
-    console.log(Page.headline);
 }
 
 // Seitennavigation in Threads wird linksbündig
