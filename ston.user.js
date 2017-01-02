@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        studis-online
 // @namespace   studis-online.de
-// @include     http://*.studis-online.de/Fragen-Brett/*
+// @include     https://*.studis-online.de/Fragen-Brett/*
 // @require     https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js
 // @version     1
 // @grant       none
@@ -62,7 +62,7 @@ function Page() {
     // Ob es sich um die Private-Message-(Senden)-Seite handelt
     // FIXME: True auf der PrivateMessageOverview
     this.isPrivateMessage = function() {
-        //return $('form[action="http://www.studis-online.de/Fragen-Brett/pm.php"]').length === 1;
+        //return $('form[action="https://www.studis-online.de/Fragen-Brett/pm.php"]').length === 1;
         return window.location.pathname === '/Fragen-Brett/pm.php';
     };
     
