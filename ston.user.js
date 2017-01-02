@@ -21,7 +21,6 @@ $(document).ready(function() {
     removeHelloOnMobile();
     
     // Desktop
-    removeHints();
     embedYoutubeLinks();
     cleanUpThreadOverviewTitle();
     cleanUpThreadTitle();
